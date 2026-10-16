@@ -384,9 +384,9 @@
 
 .sm-cloud,.sm-dholki { animation:none }
 
-.sm-env { z-index:50;perspective:1500px;cursor:pointer;background:#f5edd8;position:fixed;inset:0 }
+.sm-env { z-index:50;perspective:1500px;cursor:pointer;background:0 0;position:fixed;inset:0 }
 
-.sm-flap { will-change:transform;background-color:#f5edd8;background-image:linear-gradient(#f4ead680,#f4ead680),url(/weddings/sakshi-manav/envelope/pattern.avif);background-position:50%;background-repeat:repeat,repeat;background-size:cover;background-attachment:scroll,scroll;background-origin:padding-box,padding-box;background-clip:border-box,border-box;position:absolute;inset:0 }
+.sm-flap { will-change:transform;background-color:#0000;background-image:linear-gradient(#f4ead680,#f4ead680),url(/weddings/sakshi-manav/envelope/pattern.avif);background-position:50%;background-repeat:repeat,repeat;background-size:cover;background-attachment:scroll,scroll;background-origin:padding-box,padding-box;background-clip:border-box,border-box;position:absolute;inset:0 }
 
 .sm-flap--bottom { clip-path:polygon(0 100%,100% 100%,50% 50%);z-index:2 }
 

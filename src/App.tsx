@@ -185,21 +185,12 @@ export default function App() {
 
     let startY = 0;
     const handleTouchStart = (e: TouchEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (
-        target?.closest?.("canvas, .sm-std-card, .sm-scratch, button, a")
-      ) {
-        startY = -9999;
-        return;
-      }
-      startY = e.touches[0]?.clientY ?? 0;
+      startY = e.touches[0].clientY;
     };
 
     const handleTouchEnd = (e: TouchEvent) => {
-      if (startY === -9999) return;
-      const endY = e.changedTouches[0]?.clientY ?? startY;
-      const delta = startY - endY;
-      if (Math.abs(delta) > 50) {
+      const delta = startY - e.changedTouches[0].clientY;
+      if (Math.abs(delta) > 45) {
         navigateDeck(delta > 0 ? 1 : -1);
       }
     };
