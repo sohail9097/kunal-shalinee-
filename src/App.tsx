@@ -189,13 +189,16 @@ export default function App() {
       const target = e.target as HTMLElement | null;
       if (
         target?.closest?.(".sm-std-card") ||
+        target?.closest?.(".sm-std") ||
         target?.tagName?.toLowerCase() === "canvas"
       ) {
         touchOnScratchCard = true;
         return;
       }
       touchOnScratchCard = false;
-      startY = e.touches[0].clientY;
+      if (e.touches && e.touches[0]) {
+        startY = e.touches[0].clientY;
+      }
     };
 
     const handleTouchEnd = (e: TouchEvent) => {
@@ -203,8 +206,9 @@ export default function App() {
         touchOnScratchCard = false;
         return;
       }
+      if (!e.changedTouches || e.changedTouches.length === 0) return;
       const delta = startY - e.changedTouches[0].clientY;
-      if (Math.abs(delta) > 45) {
+      if (Math.abs(delta) > 55) {
         navigateDeck(delta > 0 ? 1 : -1);
       }
     };
