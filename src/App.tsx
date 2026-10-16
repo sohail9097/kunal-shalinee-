@@ -184,11 +184,25 @@ export default function App() {
     };
 
     let startY = 0;
+    let touchOnScratchCard = false;
     const handleTouchStart = (e: TouchEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (
+        target?.closest?.(".sm-std-card") ||
+        target?.tagName?.toLowerCase() === "canvas"
+      ) {
+        touchOnScratchCard = true;
+        return;
+      }
+      touchOnScratchCard = false;
       startY = e.touches[0].clientY;
     };
 
     const handleTouchEnd = (e: TouchEvent) => {
+      if (touchOnScratchCard) {
+        touchOnScratchCard = false;
+        return;
+      }
       const delta = startY - e.changedTouches[0].clientY;
       if (Math.abs(delta) > 45) {
         navigateDeck(delta > 0 ? 1 : -1);
