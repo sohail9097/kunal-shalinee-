@@ -100,7 +100,6 @@ export const SaveTheDateSlide: React.FC<SaveTheDateSlideProps> = ({
         <div className="sm-std-card relative mt-7 w-[80vw] max-w-[420px] overflow-hidden rounded-2xl shadow-xl">
           <ScratchCard
             active={active}
-            revealed={isScratched}
             onCompleteAction={handleScratchComplete}
             label="Scratch for the date"
           >
@@ -117,18 +116,6 @@ export const SaveTheDateSlide: React.FC<SaveTheDateSlideProps> = ({
             </div>
           </ScratchCard>
         </div>
-
-        {/* Optional quick tap reveal for instant reveal */}
-        {!isScratched && (
-          <button
-            type="button"
-            onClick={handleScratchComplete}
-            className="mt-3 inline-flex items-center gap-1.5 text-xs text-[color:var(--sm-gold-deep)] hover:text-[color:var(--sm-red-deep)] underline underline-offset-4 decoration-[color:var(--sm-gold-deep)]/40 transition-colors py-1 px-3 cursor-pointer"
-          >
-            <span>✋</span>
-            <span>Or tap here to reveal date</span>
-          </button>
-        )}
 
         {/* Countdown Timer Container */}
         <div className="mt-8 flex min-h-[92px] items-start justify-center">
