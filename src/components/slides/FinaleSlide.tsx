@@ -10,7 +10,7 @@ interface FinaleSlideProps {
 const EASE_ROYAL: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 const fadeVariant = {
-  hidden: { opacity: 0, y: 14 },
+  hidden: { opacity: 0, y: 12 },
   visible: {
     opacity: 1,
     y: 0,
@@ -28,6 +28,13 @@ export const FinaleSlide: React.FC<FinaleSlideProps> = ({ active = false }) => {
     href: ev.mapHref,
   }));
 
+  const groomParents = WEDDING_DATA.groom.parents
+    .trim()
+    .replace("Mrs.Baby", "Mrs. Baby");
+  const brideParents = WEDDING_DATA.bride.parents
+    .trim()
+    .replace("Mrs.Baby", "Mrs. Baby");
+
   return (
     <section className="sm-slide sm-ty overflow-hidden">
       {/* Background Arch & Couple Artwork */}
@@ -41,7 +48,7 @@ export const FinaleSlide: React.FC<FinaleSlideProps> = ({ active = false }) => {
       {/* Gentle Twinkling Celestial Lights */}
       <CelestialLights />
 
-      {/* Family Lineage & Gracious Presence Note - Positioned cleanly inside the Upper Palace Arch opening */}
+      {/* Family Lineage & Gracious Presence Note - Exactly positioned between top chandelier (19.8%) and couple (64.5%) */}
       <motion.div
         className="sm-ty-text-content"
         initial="hidden"
@@ -53,24 +60,24 @@ export const FinaleSlide: React.FC<FinaleSlideProps> = ({ active = false }) => {
         }}
         style={{
           position: "absolute",
-          top: "clamp(100px, 20svh, 175px)",
+          top: "21.6%",
           left: 0,
           right: 0,
           zIndex: 22,
           textAlign: "center",
-          maxWidth: "min(88vw, 360px)",
+          maxWidth: "min(86vw, 360px)",
           marginLeft: "auto",
           marginRight: "auto",
           padding: "0 0.75rem",
           pointerEvents: "auto",
         }}
       >
-        {/* Gracious Presence Header */}
+        {/* Gracious Presence Header (Sitting cleanly below the top hanging chandelier) */}
         <motion.p
           variants={fadeVariant}
           style={{
             fontFamily: "'Jacques Francois', 'Cormorant Garamond', Georgia, serif",
-            fontSize: "clamp(0.92rem, 3.8vw, 1.15rem)",
+            fontSize: "clamp(0.92rem, 3.7vw, 1.15rem)",
             color: "#5c1420",
             fontWeight: 500,
             lineHeight: 1.25,
@@ -106,10 +113,10 @@ export const FinaleSlide: React.FC<FinaleSlideProps> = ({ active = false }) => {
           <p
             style={{
               fontFamily: "'Allura', 'Great Vibes', 'Parisienne', cursive",
-              fontSize: "clamp(2.1rem, 8.4vw, 2.9rem)",
+              fontSize: "clamp(2.1rem, 8.4vw, 2.85rem)",
               color: "#7a1122",
               fontWeight: 400,
-              lineHeight: 1.05,
+              lineHeight: 1,
               textShadow: "0 1px 2px rgba(255,248,220,0.95)",
             }}
           >
@@ -118,29 +125,16 @@ export const FinaleSlide: React.FC<FinaleSlideProps> = ({ active = false }) => {
           <p
             style={{
               fontFamily: "'Jacques Francois', Georgia, serif",
-              fontSize: "clamp(0.54rem, 2.3vw, 0.68rem)",
-              letterSpacing: "0.12em",
+              fontSize: "clamp(0.52rem, 2.1vw, 0.65rem)",
+              letterSpacing: "0.13em",
               color: "#4a151d",
-              marginTop: "0.18rem",
+              marginTop: "0.22rem",
               textTransform: "uppercase",
               fontWeight: 600,
             }}
           >
-            {WEDDING_DATA.groom.parents}
+            {groomParents}
           </p>
-          {WEDDING_DATA.groom.grandparents ? (
-            <p
-              style={{
-                fontFamily: "'Jacques Francois', Georgia, serif",
-                fontSize: "clamp(0.5rem, 2.1vw, 0.62rem)",
-                letterSpacing: "0.08em",
-                color: "#6e2a14",
-                marginTop: "0.1rem",
-              }}
-            >
-              Grandson of {WEDDING_DATA.groom.grandparents}
-            </p>
-          ) : null}
         </motion.div>
 
         {/* ❖ weds ❖ with gold rules */}
@@ -153,7 +147,7 @@ export const FinaleSlide: React.FC<FinaleSlideProps> = ({ active = false }) => {
           <span
             style={{
               fontFamily: "'Allura', 'Great Vibes', 'Parisienne', cursive",
-              fontSize: "clamp(1.2rem, 5vw, 1.55rem)",
+              fontSize: "clamp(1.18rem, 4.8vw, 1.5rem)",
               color: "#7a1122",
               lineHeight: 1,
               padding: "0 0.15rem",
@@ -174,10 +168,10 @@ export const FinaleSlide: React.FC<FinaleSlideProps> = ({ active = false }) => {
           <p
             style={{
               fontFamily: "'Allura', 'Great Vibes', 'Parisienne', cursive",
-              fontSize: "clamp(2.1rem, 8.4vw, 2.9rem)",
+              fontSize: "clamp(2.1rem, 8.4vw, 2.85rem)",
               color: "#7a1122",
               fontWeight: 400,
-              lineHeight: 1.05,
+              lineHeight: 1,
               textShadow: "0 1px 2px rgba(255,248,220,0.95)",
             }}
           >
@@ -186,32 +180,19 @@ export const FinaleSlide: React.FC<FinaleSlideProps> = ({ active = false }) => {
           <p
             style={{
               fontFamily: "'Jacques Francois', Georgia, serif",
-              fontSize: "clamp(0.54rem, 2.3vw, 0.68rem)",
-              letterSpacing: "0.12em",
+              fontSize: "clamp(0.52rem, 2.1vw, 0.65rem)",
+              letterSpacing: "0.13em",
               color: "#4a151d",
-              marginTop: "0.18rem",
+              marginTop: "0.22rem",
               textTransform: "uppercase",
               fontWeight: 600,
             }}
           >
-            {WEDDING_DATA.bride.parents}
+            {brideParents}
           </p>
-          {WEDDING_DATA.bride.grandparents ? (
-            <p
-              style={{
-                fontFamily: "'Jacques Francois', Georgia, serif",
-                fontSize: "clamp(0.5rem, 2.1vw, 0.62rem)",
-                letterSpacing: "0.08em",
-                color: "#6e2a14",
-                marginTop: "0.1rem",
-              }}
-            >
-              Granddaughter of {WEDDING_DATA.bride.grandparents}
-            </p>
-          ) : null}
         </motion.div>
 
-        {/* Venues & Map Pill Button (Positioned above the couple, exactly as in reference) */}
+        {/* Venues & Map Pill Button (Sitting comfortably in the upper mid zone, well above the couple) */}
         <motion.button
           variants={fadeVariant}
           type="button"
@@ -228,8 +209,8 @@ export const FinaleSlide: React.FC<FinaleSlideProps> = ({ active = false }) => {
             alignItems: "center",
             gap: "0.55rem",
             marginTop: "clamp(0.7rem, 2vh, 1.15rem)",
-            padding: "0.55rem 1.7rem",
-            fontSize: "clamp(0.68rem, 2.8vw, 0.8rem)",
+            padding: "0.52rem 1.65rem",
+            fontSize: "clamp(0.68rem, 2.7vw, 0.78rem)",
             fontWeight: 600,
             boxShadow:
               "0 4px 16px rgba(120,53,15,0.18), inset 0 1px 1px #ffffff",
