@@ -195,13 +195,13 @@ export const FinaleSlide: React.FC<FinaleSlideProps> = ({ active = false }) => {
       {/* Made with Love by Special Invites */}
       <a
         href={`https://wa.me/919217104917?text=${encodeURIComponent(
-          "Hi, I loved Kunal & Shalini's wedding invitation and would like to know more!"
+          "Hi, I loved Kunal & Shalinee's wedding invitation and would like to know more!"
         )}`}
         target="_blank"
         rel="noopener noreferrer"
         className="sm-caps sm-madelove"
       >
-        Made with ❤️ for Kunal &amp; Shalini
+        Made with ❤️ for Kunal &amp; Shalinee
       </a>
     </section>
   );

@@ -32,7 +32,7 @@ export const MehndiSlide: React.FC<MehndiSlideProps> = ({
         />
 
         {/* Dynamic Blinking/Flickering Lantern Lights & Swaying Flowers */}
-        <MehndiGardenEffects />
+        <MehndiGardenEffects active={active} />
 
         {/* Left & Right Fireworks Loop Videos (if fireworks configured) */}
         {WEDDING_DATA.media.mehndi.fireworks &&
@@ -110,7 +110,7 @@ export const MehndiSlide: React.FC<MehndiSlideProps> = ({
               &amp;
             </span>
             <span className="sm-cv-name" style={{ color: "#fff8db" }}>
-              Shalini
+              Shalinee
             </span>
           </h2>
 
@@ -682,9 +682,12 @@ export const MehndiSlide: React.FC<MehndiSlideProps> = ({
               <span
                 className="sm-cv-dress-script"
                 style={{
-                  color: "#064e3b",
-                  textShadow: "0 1px 2px rgba(6,78,59,0.18)",
-                  fontWeight: 600,
+                  fontFamily: "'Great Vibes', 'Parisienne', cursive",
+                  fontSize: "clamp(1.65rem, 7vw, 2.15rem)",
+                  color: "#065f46",
+                  fontWeight: 400,
+                  letterSpacing: "0.02em",
+                  textShadow: "0 1px 2px rgba(6,95,70,0.15)",
                 }}
               >
                 Dress up in Green
@@ -696,7 +699,7 @@ export const MehndiSlide: React.FC<MehndiSlideProps> = ({
         {/* Couple Illustration (Easily changeable in weddingData.ts -> media.mehndi.couple) */}
         <motion.img
           src={WEDDING_DATA.media.mehndi.couple}
-          alt="Shalini and Kunal at the Mehndi & Sangeet"
+          alt="Shalinee and Kunal at the Mehndi & Sangeet"
           className="sm-cv-couple"
           initial={false}
           animate={{

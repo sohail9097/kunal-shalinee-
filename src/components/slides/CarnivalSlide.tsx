@@ -68,26 +68,28 @@ export const CarnivalSlide: React.FC<CarnivalSlideProps> = ({
         <FlowerPetals count={18} />
 
         {/* Left & Right Fireworks Loop Videos */}
-        {["l", "r"].map((side) => (
-          <motion.video
-            key={side}
-            className={`sm-cv-fw sm-cv-fw--${side}`}
-            src={WEDDING_DATA.media.carnival.fireworks}
-            muted
-            loop
-            playsInline
-            autoPlay
-            preload="auto"
-            aria-hidden={true}
-            initial={false}
-            animate={{ opacity: isOpen ? 0.95 : 0 }}
-            transition={{
-              duration: 0.9,
-              ease: EASE_DOOR,
-              delay: isOpen ? 0.5 : 0,
-            }}
-          />
-        ))}
+        {active &&
+          isOpen &&
+          ["l", "r"].map((side) => (
+            <motion.video
+              key={side}
+              className={`sm-cv-fw sm-cv-fw--${side}`}
+              src={WEDDING_DATA.media.carnival.fireworks}
+              muted
+              loop
+              playsInline
+              autoPlay
+              preload="none"
+              aria-hidden={true}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.95 }}
+              transition={{
+                duration: 0.8,
+                ease: EASE_DOOR,
+                delay: 0.4,
+              }}
+            />
+          ))}
 
         {/* Marigold Garland swinging in from top */}
         <motion.img
@@ -122,7 +124,7 @@ export const CarnivalSlide: React.FC<CarnivalSlideProps> = ({
             <span className="sm-cv-x" aria-hidden={true}>
               &amp;
             </span>
-            <span className="sm-cv-name">Shalini</span>
+            <span className="sm-cv-name">Shalinee</span>
           </h2>
 
           {/* Golden Royal Crest SVG */}
@@ -708,7 +710,19 @@ export const CarnivalSlide: React.FC<CarnivalSlideProps> = ({
             {/* Dress code text */}
             <div className="sm-cv-dress-inner">
               <span className="sm-cv-dress-label">D R E S S &nbsp; C O D E</span>
-              <span className="sm-cv-dress-script">Dress up in Yellow &amp; Pink</span>
+              <span
+                className="sm-cv-dress-script"
+                style={{
+                  fontFamily: "'Great Vibes', 'Parisienne', cursive",
+                  fontSize: "clamp(1.65rem, 7vw, 2.15rem)",
+                  color: "#991b1b",
+                  fontWeight: 400,
+                  letterSpacing: "0.02em",
+                  textShadow: "0 1px 2px rgba(153,27,27,0.15)",
+                }}
+              >
+                Dress up in Yellow &amp; Pink
+              </span>
             </div>
           </div>
         </motion.div>
@@ -716,7 +730,7 @@ export const CarnivalSlide: React.FC<CarnivalSlideProps> = ({
         {/* Couple Illustration */}
         <motion.img
           src={WEDDING_DATA.media.carnival.couple}
-          alt="Shalini and Kunal arriving at the Carnival"
+          alt="Shalinee and Kunal arriving at the Carnival"
           className="sm-cv-couple"
           initial={false}
           animate={{

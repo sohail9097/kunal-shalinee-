@@ -15,23 +15,24 @@ export interface WeddingEvent {
 }
 
 export const WEDDING_DATA = {
-  bride: {
-    name: "Dr. Shalinee",
-    hindiName: "शालिनी",
-    parents: "D/O Mr. Vidyasagar Mahaseth & Mrs. Anju Devi ",
-    grandparents: "",
-  } as PersonInfo,
+  
   groom: {
     name: "Dr. Kunal",
     hindiName: "कुणाल",
     parents: "S/O Mr. Subodh Prasad & Mrs.Baby Devi ",
     grandparents: "",
   } as PersonInfo,
+  bride: {
+    name: "Dr. Shalinee",
+    hindiName: "शालिनी",
+    parents: "D/O Mr. Vidyasagar Mahaseth & Mrs. Anju Devi ",
+    grandparents: "",
+  } as PersonInfo,
   hashtag: "#Kunal Weds Shalinee",
   targetDate: "2026-11-25T00:00:00+05:30",
   venue: "Kala Bhawan Purnea, Bihar",
   venueShort: "Kala Bhawan Purnea",
-  mapHref: "https://www.google.com/maps/place/Sukrit+royal+palace/data=!4m2!3m1!1s0x0:0xfc90016b73bf413f?sa=X&ved=1t:2428&hl=en-IN&ictx=111",
+  mapHref: "https://maps.app.goo.gl/WVN4zuAy9XQoH7Ww7",
   events: [
     {
       date: "24 November 2026",
@@ -39,7 +40,7 @@ export const WEDDING_DATA = {
       time: "10:00 AM",
       venue: "Baby Niwas, Rambagh, Purnia",
       venueShort: "Baby Niwas Rambagh Purnia",
-      mapHref: "https://www.google.com/maps/search/?api=1&query=Baby+Niwas+Rambagh+Purnia",
+      mapHref: "https://maps.app.goo.gl/CG756otsw1afczNK9",
     },
     {
       date: "24 November 2026",
@@ -47,23 +48,15 @@ export const WEDDING_DATA = {
       time: "5:00 PM",
       venue: "Baby Niwas, Rambagh, Purnia",
       venueShort: "Baby Niwas Rambagh Purnia",
-      mapHref: "https://www.google.com/maps/search/?api=1&query=Baby+Niwas+Rambagh+Purnia",
+      mapHref: "https://maps.app.goo.gl/CG756otsw1afczNK9",
     },
     {
       date: "25 November 2026",
       title: "Wedding",
-      time: "8:00 PM",
-      venue: "Sukrit Royal Palace, Purnia, Bihar",
-      venueShort: "Sukrit Royal Palace",
-      mapHref: "https://www.google.com/maps/place/Sukrit+royal+palace/data=!4m2!3m1!1s0x0:0xfc90016b73bf413f?sa=X&ved=1t:2428&hl=en-IN&ictx=111",
-    },
-    {
-      date: "12 Dec 2026",
-      title: "Reception",
-      time: "7:30 PM",
-      venue: "Sukrit Royal Palace, Purnia, Bihar",
-      venueShort: "Sukrit Royal Palace",
-      mapHref: "https://maps.app.goo.gl/PK5G4UrPRp9DyoHq6",
+      time: "4:00 PM",
+      venue: "Kala Bhawan, Purnia, Bihar",
+      venueShort: "Kala Bhawan purnia",
+      mapHref: "https://maps.app.goo.gl/WVN4zuAy9XQoH7Ww7",
     },
   ] as WeddingEvent[],
   confettiColors: ["#a11729", "#c9a227", "#e7c86b", "#2f5233", "#fbf6ec"],

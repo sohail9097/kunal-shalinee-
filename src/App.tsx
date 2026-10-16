@@ -7,11 +7,10 @@ import { SaveTheDateSlide } from "./components/slides/SaveTheDateSlide";
 import { CarnivalSlide } from "./components/slides/CarnivalSlide";
 import { MehndiSlide } from "./components/slides/MehndiSlide";
 import { WeddingSlide } from "./components/slides/WeddingSlide";
-import { ReceptionSlide } from "./components/slides/ReceptionSlide";
 import { FinaleSlide } from "./components/slides/FinaleSlide";
 import { AudioPlayer } from "./components/AudioPlayer";
 
-const SLIDE_COUNT = 6;
+const SLIDE_COUNT = 5;
 
 // Color accents for the swipe down hint on each slide
 const HINT_COLORS: Record<number, string> = {
@@ -19,14 +18,13 @@ const HINT_COLORS: Record<number, string> = {
   1: "#7a1226",
   2: "#2d6a4f",
   3: "#f3e9d6",
-  4: "#4a1220",
-  5: "#e7c86b",
+  4: "#e7c86b",
 };
 
 const HINT_SHADOWS: Record<number, string> = {
   1: "drop-shadow(0 0 5px rgba(255,248,236,0.9))",
   2: "drop-shadow(0 0 5px rgba(240,253,244,0.9))",
-  4: "drop-shadow(0 0 5px rgba(255,241,214,0.85))",
+  3: "drop-shadow(0 0 5px rgba(255,241,214,0.85))",
 };
 
 export default function App() {
@@ -150,7 +148,7 @@ export default function App() {
       changeSlide(direction);
       window.setTimeout(() => {
         isTransitioning.current = false;
-      }, 1150);
+      }, 750);
     },
     [changeSlide, isEnvelopeClosed, readyForDeck, slideIndex, isHaldiOpen]
   );
@@ -259,10 +257,13 @@ export default function App() {
             initial={false}
             animate={{
               opacity: slideIndex === 0 ? 1 : 0,
-              scale: slideIndex === 0 ? 1 : 1.06,
             }}
-            transition={{ duration: 1.05, ease: [0.4, 0, 0.2, 1] }}
-            style={{ pointerEvents: slideIndex === 0 ? "auto" : "none" }}
+            transition={{ duration: 0.65, ease: [0.25, 1, 0.5, 1] }}
+            style={{
+              pointerEvents: slideIndex === 0 ? "auto" : "none",
+              display: Math.abs(slideIndex - 0) <= 1 ? "block" : "none",
+              willChange: "opacity",
+            }}
             aria-hidden={slideIndex !== 0}
           >
             <SaveTheDateSlide
@@ -277,10 +278,13 @@ export default function App() {
             initial={false}
             animate={{
               opacity: slideIndex === 1 ? 1 : 0,
-              scale: slideIndex === 1 ? 1 : 1.06,
             }}
-            transition={{ duration: 1.05, ease: [0.4, 0, 0.2, 1] }}
-            style={{ pointerEvents: slideIndex === 1 ? "auto" : "none" }}
+            transition={{ duration: 0.65, ease: [0.25, 1, 0.5, 1] }}
+            style={{
+              pointerEvents: slideIndex === 1 ? "auto" : "none",
+              display: Math.abs(slideIndex - 1) <= 1 ? "block" : "none",
+              willChange: "opacity",
+            }}
             aria-hidden={slideIndex !== 1}
           >
             <CarnivalSlide
@@ -297,10 +301,13 @@ export default function App() {
             initial={false}
             animate={{
               opacity: slideIndex === 2 ? 1 : 0,
-              scale: slideIndex === 2 ? 1 : 1.06,
             }}
-            transition={{ duration: 1.05, ease: [0.4, 0, 0.2, 1] }}
-            style={{ pointerEvents: slideIndex === 2 ? "auto" : "none" }}
+            transition={{ duration: 0.65, ease: [0.25, 1, 0.5, 1] }}
+            style={{
+              pointerEvents: slideIndex === 2 ? "auto" : "none",
+              display: Math.abs(slideIndex - 2) <= 1 ? "block" : "none",
+              willChange: "opacity",
+            }}
             aria-hidden={slideIndex !== 2}
           >
             <MehndiSlide
@@ -315,10 +322,13 @@ export default function App() {
             initial={false}
             animate={{
               opacity: slideIndex === 3 ? 1 : 0,
-              scale: slideIndex === 3 ? 1 : 1.06,
             }}
-            transition={{ duration: 1.05, ease: [0.4, 0, 0.2, 1] }}
-            style={{ pointerEvents: slideIndex === 3 ? "auto" : "none" }}
+            transition={{ duration: 0.65, ease: [0.25, 1, 0.5, 1] }}
+            style={{
+              pointerEvents: slideIndex === 3 ? "auto" : "none",
+              display: Math.abs(slideIndex - 3) <= 1 ? "block" : "none",
+              willChange: "opacity",
+            }}
             aria-hidden={slideIndex !== 3}
           >
             <WeddingSlide
@@ -327,38 +337,23 @@ export default function App() {
             />
           </motion.div>
 
-          {/* Slide 4: Reception */}
+          {/* Slide 4: Finale & Lineage */}
           <motion.div
             className="sm-layer"
             initial={false}
             animate={{
               opacity: slideIndex === 4 ? 1 : 0,
-              scale: slideIndex === 4 ? 1 : 1.06,
             }}
-            transition={{ duration: 1.05, ease: [0.4, 0, 0.2, 1] }}
-            style={{ pointerEvents: slideIndex === 4 ? "auto" : "none" }}
+            transition={{ duration: 0.65, ease: [0.25, 1, 0.5, 1] }}
+            style={{
+              pointerEvents: slideIndex === 4 ? "auto" : "none",
+              display: Math.abs(slideIndex - 4) <= 1 ? "block" : "none",
+              willChange: "opacity",
+            }}
             aria-hidden={slideIndex !== 4}
           >
-            <ReceptionSlide
-              active={slideIndex === 4 && !isEnvelopeClosed && readyForDeck}
-              onNext={() => navigateDeck(1)}
-            />
-          </motion.div>
-
-          {/* Slide 5: Finale & Lineage */}
-          <motion.div
-            className="sm-layer"
-            initial={false}
-            animate={{
-              opacity: slideIndex === 5 ? 1 : 0,
-              scale: slideIndex === 5 ? 1 : 1.06,
-            }}
-            transition={{ duration: 1.05, ease: [0.4, 0, 0.2, 1] }}
-            style={{ pointerEvents: slideIndex === 5 ? "auto" : "none" }}
-            aria-hidden={slideIndex !== 5}
-          >
             <FinaleSlide
-              active={slideIndex === 5 && !isEnvelopeClosed && readyForDeck}
+              active={slideIndex === 4 && !isEnvelopeClosed && readyForDeck}
             />
           </motion.div>
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 
 interface RoyalHaldiGateProps {
@@ -15,6 +15,19 @@ export const RoyalHaldiGate: React.FC<RoyalHaldiGateProps> = ({
   active = true,
 }) => {
   const isTriggered = useRef(false);
+  const [isGone, setIsGone] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      const timer = setTimeout(() => {
+        setIsGone(true);
+      }, 1500);
+      return () => clearTimeout(timer);
+    } else {
+      setIsGone(false);
+      isTriggered.current = false;
+    }
+  }, [isOpen]);
 
   // Play royal bell chime on open using Web Audio API
   const playBellChime = useCallback(() => {
@@ -56,6 +69,8 @@ export const RoyalHaldiGate: React.FC<RoyalHaldiGateProps> = ({
       onOpen();
     }
   };
+
+  if (isGone) return null;
 
   return (
     <div

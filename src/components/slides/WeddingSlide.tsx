@@ -33,19 +33,21 @@ export const WeddingSlide: React.FC<WeddingSlideProps> = ({
       />
 
       {/* Royal Fireworks Video Overlay */}
-      <motion.video
-        className="sm-wed-fw"
-        src={WEDDING_DATA.media.wedding.fireworks}
-        muted
-        loop
-        playsInline
-        autoPlay
-        preload="auto"
-        aria-hidden={true}
-        initial={false}
-        animate={{ opacity: active ? 0.8 : 0 }}
-        transition={{ duration: 1.1, ease: EASE_ROYAL, delay: active ? 0.4 : 0 }}
-      />
+      {active && (
+        <motion.video
+          className="sm-wed-fw"
+          src={WEDDING_DATA.media.wedding.fireworks}
+          muted
+          loop
+          playsInline
+          autoPlay
+          preload="none"
+          aria-hidden={true}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.8 }}
+          transition={{ duration: 0.8, ease: EASE_ROYAL, delay: 0.4 }}
+        />
+      )}
 
       {/* Center Event Card Details */}
       <div className="sm-wed-inner">
@@ -82,34 +84,56 @@ export const WeddingSlide: React.FC<WeddingSlideProps> = ({
               {event.venueShort}
             </a>
           </p>
-        </motion.div>
 
-        {/* Down Arrow for Next Slide */}
-        {active && onNext && (
-          <motion.button
-            type="button"
-            onClick={onNext}
-            className="mt-6 flex h-10 w-10 items-center justify-center rounded-full border border-[#c9a227]/60 bg-[#4d0d16]/70 text-[#fbf6ec] shadow-lg transition-transform hover:scale-110"
-            aria-label="Next slide"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 1.6 }}
+          {/* Heartfelt Blessing Text */}
+          <p
+            className="mt-3.5 mx-auto max-w-[340px] px-2 text-center"
+            style={{
+              fontFamily: "'Great Vibes', 'Parisienne', cursive",
+              fontSize: "clamp(1.4rem, 5.8vw, 1.85rem)",
+              color: "#4a2418",
+              fontWeight: 400,
+              lineHeight: 1.25,
+              letterSpacing: "0.02em",
+              textShadow: "0 1px 2px rgba(255, 248, 235, 0.8)",
+            }}
           >
-            <svg
-              viewBox="0 0 24 24"
-              width="20"
-              height="20"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
-          </motion.button>
-        )}
+            Your presence and blessings will make our day truly special.
+          </p>
+        </motion.div>
       </div>
+
+      {/* Down Arrow for Next Slide (Fixed Center Bottom) */}
+      {active && onNext && (
+        <motion.button
+          type="button"
+          onClick={onNext}
+          className="sm-cv-down-btn"
+          style={{
+            background: "rgba(90, 42, 30, 0.85)",
+            border: "1.5px solid rgba(201, 162, 39, 0.75)",
+            boxShadow: "0 4px 14px rgba(0, 0, 0, 0.45)",
+          }}
+          aria-label="Next slide"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 1.4 }}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="#ffffff"
+            strokeWidth="2.4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden={true}
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </motion.button>
+      )}
     </section>
   );
 };
