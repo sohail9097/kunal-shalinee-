@@ -164,7 +164,13 @@ export default function App() {
 
   // Global mouse wheel, touch and keyboard listeners
   useEffect(() => {
+    const isScratchArea = (target: EventTarget | null) => {
+      const el = target as HTMLElement | null;
+      return !!el?.closest?.(".sm-std-card, canvas");
+    };
+
     const handleWheel = (e: WheelEvent) => {
+      if (isScratchArea(e.target)) return;
       if (Math.abs(e.deltaY) < 8) return;
       navigateDeck(e.deltaY > 0 ? 1 : -1);
     };
@@ -184,31 +190,15 @@ export default function App() {
     };
 
     let startY = 0;
-    let touchOnScratchCard = false;
     const handleTouchStart = (e: TouchEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (
-        target?.closest?.(".sm-std-card") ||
-        target?.closest?.(".sm-std") ||
-        target?.tagName?.toLowerCase() === "canvas"
-      ) {
-        touchOnScratchCard = true;
-        return;
-      }
-      touchOnScratchCard = false;
-      if (e.touches && e.touches[0]) {
-        startY = e.touches[0].clientY;
-      }
+      if (isScratchArea(e.target)) return;
+      startY = e.touches[0].clientY;
     };
 
     const handleTouchEnd = (e: TouchEvent) => {
-      if (touchOnScratchCard) {
-        touchOnScratchCard = false;
-        return;
-      }
-      if (!e.changedTouches || e.changedTouches.length === 0) return;
+      if (isScratchArea(e.target)) return;
       const delta = startY - e.changedTouches[0].clientY;
-      if (Math.abs(delta) > 55) {
+      if (Math.abs(delta) > 45) {
         navigateDeck(delta > 0 ? 1 : -1);
       }
     };

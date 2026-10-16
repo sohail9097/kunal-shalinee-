@@ -7,6 +7,8 @@ interface GanpatiGateProps {
   onFinishAction: () => void;
 }
 
+const EASE_ROYAL: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
 export const GanpatiGate: React.FC<GanpatiGateProps> = ({
   reveal = true,
   onFinishAction,
@@ -29,21 +31,23 @@ export const GanpatiGate: React.FC<GanpatiGateProps> = ({
     if (!reveal || triggered.current) return;
     triggered.current = true;
 
-    const timer = setTimeout(() => {
-      setIsPlaying(true);
-      const vid = videoRef.current;
-      if (vid) {
-        vid.playbackRate = 1;
-        vid.play().catch(() => {
-          // If video fails to autoplay, still allow it to progress smoothly
+    // Start video playback seamlessly as soon as envelope is tapped
+    const vid = videoRef.current;
+    if (vid) {
+      vid.playbackRate = 1;
+      vid
+        .play()
+        .then(() => {
+          setIsPlaying(true);
+        })
+        .catch(() => {
           setTimeout(handleFinish, 3000);
         });
-      }
-      // Safety timeout in case video event doesn't trigger
-      setTimeout(handleFinish, 8800);
-    }, 300);
+    }
 
-    return () => clearTimeout(timer);
+    // Safety timeout in case video event doesn't trigger
+    const safetyTimer = setTimeout(handleFinish, 8800);
+    return () => clearTimeout(safetyTimer);
   }, [reveal]);
 
   return (
@@ -51,27 +55,29 @@ export const GanpatiGate: React.FC<GanpatiGateProps> = ({
       {!isDismissed && (
         <motion.div
           className="sm-opengate"
-          initial={{ scale: 0.72, opacity: 0 }}
-          animate={{ scale: reveal ? 1 : 0.72, opacity: reveal ? 1 : 0 }}
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{
-            scale: { duration: 1.5, ease: [0.22, 1, 0.36, 1] },
-            opacity: { duration: 1.2, ease: [0.4, 0, 0.2, 1] },
+            opacity: { duration: 0.85, ease: EASE_ROYAL },
           }}
           style={{ pointerEvents: "auto" }}
           onClick={handleFinish}
         >
-          {/* Poster Image */}
+          {/* Poster Image (Smooth crossfade) */}
           <img
             src={WEDDING_DATA.media.opening.ganpatiPoster}
             alt="Shree Ganeshaya Namah"
             className="sm-opengate-media"
             fetchPriority="high"
             aria-hidden={true}
-            style={{ opacity: isPlaying ? 0 : 1 }}
+            style={{
+              opacity: isPlaying ? 0 : 1,
+              transition: "opacity 0.75s ease-in-out",
+            }}
           />
 
-          {/* Opening Video */}
+          {/* Opening Video (Smooth fade in without sudden jerk) */}
           <video
             ref={videoRef}
             className="sm-opengate-media"
@@ -81,7 +87,10 @@ export const GanpatiGate: React.FC<GanpatiGateProps> = ({
             playsInline
             preload="auto"
             onEnded={handleFinish}
-            style={{ opacity: isPlaying ? 1 : 0 }}
+            style={{
+              opacity: isPlaying ? 1 : 0,
+              transition: "opacity 0.75s ease-in-out",
+            }}
           />
 
           {/* Skip / Continue Hint */}

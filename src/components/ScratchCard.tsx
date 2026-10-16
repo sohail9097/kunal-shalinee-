@@ -10,25 +10,26 @@ interface ScratchCardProps {
 export const ScratchCard: React.FC<ScratchCardProps> = ({
   children,
   onCompleteAction,
-  label = "Scratch to reveal",
+  label = "Scratch for the date",
   active = true,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const isScratching = useRef(false);
-  const completed = useRef(false);
   const hasScratched = useRef(false);
-  const lastPos = useRef<{ x: number; y: number } | null>(null);
-  const scratchDistance = useRef(0);
+  const completed = useRef(false);
+  const lastPointRef = useRef<{ x: number; y: number } | null>(null);
+  const moveCounterRef = useRef(0);
   const [isRevealed, setIsRevealed] = useState(false);
 
+  // Draw royal gold foil cover
   const drawFoil = useCallback(
     (ctx: CanvasRenderingContext2D, width: number, height: number) => {
       ctx.clearRect(0, 0, width, height);
       ctx.save();
       ctx.beginPath();
       if (typeof ctx.roundRect === "function") {
-        ctx.roundRect(0, 0, width, height, 10);
+        ctx.roundRect(0, 0, width, height, 12);
       } else {
         ctx.rect(0, 0, width, height);
       }
@@ -46,7 +47,7 @@ export const ScratchCard: React.FC<ScratchCardProps> = ({
       ctx.fillRect(0, 0, width, height);
 
       // Delicate foil hatching lines
-      ctx.strokeStyle = "rgba(120, 80, 10, 0.12)";
+      ctx.strokeStyle = "rgba(120, 80, 10, 0.14)";
       ctx.lineWidth = 1;
       for (let x = -height; x < width; x += 7) {
         ctx.beginPath();
@@ -66,7 +67,7 @@ export const ScratchCard: React.FC<ScratchCardProps> = ({
       ctx.lineWidth = 1.5;
       ctx.beginPath();
       if (typeof ctx.roundRect === "function") {
-        ctx.roundRect(8, 8, width - 16, height - 16, 7);
+        ctx.roundRect(8, 8, width - 16, height - 16, 8);
       } else {
         ctx.rect(8, 8, width - 16, height - 16);
       }
@@ -77,17 +78,17 @@ export const ScratchCard: React.FC<ScratchCardProps> = ({
 
       // Royal seal emblem rings
       const centerY = height / 2 - 28;
-      ctx.strokeStyle = "rgba(74, 14, 21, 0.6)";
+      ctx.strokeStyle = "rgba(74, 14, 21, 0.65)";
       ctx.lineWidth = 1.6;
       ctx.beginPath();
-      ctx.arc(width / 2, centerY, 12, 0, 2 * Math.PI);
+      ctx.arc(width / 2, centerY, 13, 0, 2 * Math.PI);
       ctx.stroke();
       ctx.beginPath();
-      ctx.arc(width / 2, centerY, 7, 0, 2 * Math.PI);
+      ctx.arc(width / 2, centerY, 8, 0, 2 * Math.PI);
       ctx.stroke();
 
       // Label text
-      const maxTextWidth = width - 44;
+      const maxTextWidth = width - 40;
       const upperLabel = label.toUpperCase();
       let fontSize = 14;
       ctx.font = `600 ${fontSize}px "Jacques Francois", Georgia, serif`;
@@ -96,7 +97,7 @@ export const ScratchCard: React.FC<ScratchCardProps> = ({
         fontSize = Math.max(9, (fontSize * maxTextWidth) / textWidth);
         ctx.font = `600 ${fontSize}px "Jacques Francois", Georgia, serif`;
       }
-      ctx.fillStyle = "rgba(74, 14, 21, 0.9)";
+      ctx.fillStyle = "rgba(74, 14, 21, 0.92)";
       ctx.fillText(upperLabel, width / 2, height / 2 + 8);
 
       // Subtitle
@@ -108,7 +109,7 @@ export const ScratchCard: React.FC<ScratchCardProps> = ({
         hintSize = Math.max(8, (hintSize * maxTextWidth) / hintWidth);
         ctx.font = `italic 400 ${hintSize}px "Playfair Display", Georgia, serif`;
       }
-      ctx.fillStyle = "rgba(74, 14, 21, 0.7)";
+      ctx.fillStyle = "rgba(74, 14, 21, 0.72)";
       ctx.fillText(hint, width / 2, height / 2 + 30);
 
       ctx.restore();
@@ -121,31 +122,29 @@ export const ScratchCard: React.FC<ScratchCardProps> = ({
     const container = containerRef.current;
     if (!canvas || !container) return;
 
-    // Do not erase progress if user already started scratching
-    if (completed.current || hasScratched.current) return;
-
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const width = container.offsetWidth;
     const height = container.offsetHeight;
     if (width === 0 || height === 0) return;
 
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
     canvas.style.width = `${width}px`;
     canvas.style.height = `${height}px`;
 
-    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    const ctx = canvas.getContext("2d");
     if (ctx) {
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.setTransform(1, 0, 0, 1, 0, 0); // Clean reset before scale
       ctx.scale(dpr, dpr);
       drawFoil(ctx, width, height);
     }
   }, [drawFoil]);
 
+  // Initial and resize observer handling
   useEffect(() => {
     initCanvas();
-    const t = setTimeout(initCanvas, 120);
     const observer = new ResizeObserver(() => {
+      // Only re-initialize if the user hasn't started scratching yet
       if (!completed.current && !hasScratched.current) {
         initCanvas();
       }
@@ -153,88 +152,35 @@ export const ScratchCard: React.FC<ScratchCardProps> = ({
     if (containerRef.current) {
       observer.observe(containerRef.current);
     }
-    return () => {
-      clearTimeout(t);
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, [initCanvas]);
 
-  const revealCard = useCallback(() => {
-    if (completed.current) return;
-    completed.current = true;
-    setIsRevealed(true);
-    onCompleteAction?.();
-  }, [onCompleteAction]);
+  // Re-init canvas when active becomes true to account for any layout changes
+  useEffect(() => {
+    if (active && !completed.current && !hasScratched.current) {
+      const timer = setTimeout(() => {
+        initCanvas();
+      }, 60);
+      return () => clearTimeout(timer);
+    }
+  }, [active, initCanvas]);
 
-  const scratch = useCallback(
-    (clientX: number, clientY: number) => {
-      const canvas = canvasRef.current;
-      if (!canvas || completed.current) return;
-
-      const rect = canvas.getBoundingClientRect();
-      const ctx = canvas.getContext("2d", { willReadFrequently: true });
-      if (!ctx || rect.width === 0 || rect.height === 0) return;
-
-      hasScratched.current = true;
-      const x = clientX - rect.left;
-      const y = clientY - rect.top;
-
-      ctx.save();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.scale(dpr, dpr);
-
-      ctx.globalCompositeOperation = "destination-out";
-      ctx.fillStyle = "#000000";
-      ctx.strokeStyle = "#000000";
-      ctx.lineWidth = 50;
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-
-      if (lastPos.current) {
-        ctx.beginPath();
-        ctx.moveTo(lastPos.current.x, lastPos.current.y);
-        ctx.lineTo(x, y);
-        ctx.stroke();
-
-        scratchDistance.current += Math.hypot(
-          x - lastPos.current.x,
-          y - lastPos.current.y
-        );
-      } else {
-        ctx.beginPath();
-        ctx.arc(x, y, 25, 0, 2 * Math.PI);
-        ctx.fill();
-        scratchDistance.current += 25;
-      }
-      ctx.restore();
-
-      lastPos.current = { x, y };
-
-      // Fast auto-reveal after scratching across the card
-      if (scratchDistance.current > rect.width * 1.05) {
-        revealCard();
-      }
-    },
-    [revealCard]
-  );
-
+  // Check progress percentage
   const checkScratchPercentage = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas || completed.current) return;
 
-    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const { width, height } = canvas;
-    if (width === 0 || height === 0) return;
-
     try {
+      const { width, height } = canvas;
+      if (width === 0 || height === 0) return;
       const imageData = ctx.getImageData(0, 0, width, height).data;
       let cleared = 0;
       let total = 0;
 
-      // Sample pixels across grid
+      // Sample pixels across 16px grid
       for (let y = 0; y < height; y += 16) {
         for (let x = 0; x < width; x += 16) {
           const alpha = imageData[(y * width + x) * 4 + 3];
@@ -243,118 +189,159 @@ export const ScratchCard: React.FC<ScratchCardProps> = ({
         }
       }
 
-      if (total > 0 && cleared / total > 0.35) {
-        revealCard();
+      // Responsive threshold for natural scratch reveal
+      if (total > 0 && cleared / total > 0.4) {
+        completed.current = true;
+        setIsRevealed(true);
+        onCompleteAction?.();
       }
     } catch {
       // ignore
     }
-  }, [revealCard]);
+  }, [onCompleteAction]);
 
-  // Touch and pointer interaction listeners
+  // Smooth continuous scratch routine
+  const scratch = useCallback(
+    (clientX: number, clientY: number, isMove = false) => {
+      const canvas = canvasRef.current;
+      if (!canvas || completed.current) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+
+      hasScratched.current = true;
+
+      ctx.save();
+      ctx.globalCompositeOperation = "destination-out";
+
+      // Draw continuous line between points for silky smooth scratching
+      if (isMove && lastPointRef.current) {
+        ctx.beginPath();
+        ctx.moveTo(lastPointRef.current.x, lastPointRef.current.y);
+        ctx.lineTo(x, y);
+        ctx.lineWidth = 48;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.stroke();
+      }
+
+      // Circular brush stamp
+      ctx.beginPath();
+      ctx.arc(x, y, 24, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.restore();
+
+      lastPointRef.current = { x, y };
+
+      if (isMove) {
+        moveCounterRef.current++;
+        if (moveCounterRef.current % 7 === 0) {
+          checkScratchPercentage();
+        }
+      }
+    },
+    [checkScratchPercentage]
+  );
+
+  // Pointer and touch event handlers
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    // Pointer events (Desktop mouse & pen)
     const handlePointerDown = (e: PointerEvent) => {
-      if (e.pointerType === "touch" || completed.current) return;
+      if (!active || completed.current) return;
       isScratching.current = true;
+      lastPointRef.current = null;
       try {
         canvas.setPointerCapture(e.pointerId);
-      } catch {}
-      lastPos.current = null;
-      scratch(e.clientX, e.clientY);
+      } catch {
+        // ignore
+      }
+      scratch(e.clientX, e.clientY, false);
     };
 
     const handlePointerMove = (e: PointerEvent) => {
-      if (e.pointerType === "touch" || !isScratching.current || completed.current)
-        return;
-      scratch(e.clientX, e.clientY);
+      if (!isScratching.current || !active || completed.current) return;
+      scratch(e.clientX, e.clientY, true);
     };
 
     const handlePointerUp = (e: PointerEvent) => {
-      if (e.pointerType === "touch") return;
       if (isScratching.current) {
         isScratching.current = false;
-        lastPos.current = null;
+        lastPointRef.current = null;
         try {
           if (canvas.hasPointerCapture(e.pointerId)) {
             canvas.releasePointerCapture(e.pointerId);
           }
-        } catch {}
+        } catch {
+          // ignore
+        }
         checkScratchPercentage();
       }
     };
 
-    // Touch events (Mobile phone primary)
-    const handleTouchStart = (e: TouchEvent) => {
-      if (completed.current) return;
-      e.preventDefault();
-      e.stopPropagation();
-      isScratching.current = true;
-      lastPos.current = null;
-      const touch = e.touches[0];
-      if (touch) {
-        scratch(touch.clientX, touch.clientY);
-      }
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (!isScratching.current || completed.current) return;
-      e.preventDefault();
-      e.stopPropagation();
-      const touch = e.touches[0];
-      if (touch) {
-        scratch(touch.clientX, touch.clientY);
-      }
-    };
-
-    const handleTouchEnd = (e: TouchEvent) => {
-      e.stopPropagation();
+    const handlePointerCancel = (e: PointerEvent) => {
       if (isScratching.current) {
         isScratching.current = false;
-        lastPos.current = null;
+        lastPointRef.current = null;
+        try {
+          if (canvas.hasPointerCapture(e.pointerId)) {
+            canvas.releasePointerCapture(e.pointerId);
+          }
+        } catch {
+          // ignore
+        }
         checkScratchPercentage();
       }
     };
 
     canvas.addEventListener("pointerdown", handlePointerDown);
-    window.addEventListener("pointermove", handlePointerMove);
-    window.addEventListener("pointerup", handlePointerUp);
-    canvas.addEventListener("pointercancel", handlePointerUp);
+    canvas.addEventListener("pointermove", handlePointerMove);
+    canvas.addEventListener("pointerup", handlePointerUp);
+    canvas.addEventListener("pointercancel", handlePointerCancel);
 
-    canvas.addEventListener("touchstart", handleTouchStart, { passive: false });
-    canvas.addEventListener("touchmove", handleTouchMove, { passive: false });
-    canvas.addEventListener("touchend", handleTouchEnd, { passive: false });
-    canvas.addEventListener("touchcancel", handleTouchEnd, { passive: false });
+    // Prevent default touch gestures (scrolling) directly on the scratch surface
+    const handleTouchPrevent = (e: TouchEvent) => {
+      if (!completed.current) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+    canvas.addEventListener("touchstart", handleTouchPrevent, {
+      passive: false,
+    });
+    canvas.addEventListener("touchmove", handleTouchPrevent, {
+      passive: false,
+    });
+    canvas.addEventListener("touchend", handleTouchPrevent, {
+      passive: false,
+    });
 
     return () => {
       canvas.removeEventListener("pointerdown", handlePointerDown);
-      window.removeEventListener("pointermove", handlePointerMove);
-      window.removeEventListener("pointerup", handlePointerUp);
-      canvas.removeEventListener("pointercancel", handlePointerUp);
-
-      canvas.removeEventListener("touchstart", handleTouchStart);
-      canvas.removeEventListener("touchmove", handleTouchMove);
-      canvas.removeEventListener("touchend", handleTouchEnd);
-      canvas.removeEventListener("touchcancel", handleTouchEnd);
+      canvas.removeEventListener("pointermove", handlePointerMove);
+      canvas.removeEventListener("pointerup", handlePointerUp);
+      canvas.removeEventListener("pointercancel", handlePointerCancel);
+      canvas.removeEventListener("touchstart", handleTouchPrevent);
+      canvas.removeEventListener("touchmove", handleTouchPrevent);
+      canvas.removeEventListener("touchend", handleTouchPrevent);
     };
-  }, [scratch, checkScratchPercentage]);
+  }, [active, scratch, checkScratchPercentage]);
 
   return (
     <div ref={containerRef} className="relative select-none">
       <div className="relative z-0">{children}</div>
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 z-10 touch-none rounded-[inherit] transition-opacity duration-700"
+        className="absolute inset-0 z-10 touch-none rounded-[inherit] transition-opacity duration-700 select-none"
         style={{
           opacity: isRevealed ? 0 : 1,
           pointerEvents: isRevealed || !active ? "none" : "auto",
           cursor: "grab",
-          touchAction: "none",
-          WebkitTouchCallout: "none",
-          WebkitUserSelect: "none",
         }}
         aria-hidden={isRevealed}
       />

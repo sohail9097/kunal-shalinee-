@@ -920,7 +920,7 @@
 
 .sm-light { opacity:var(--sm-peak);animation:none }
 
-.sm-ty-text { z-index:22;color:#4a2418;top:43% }
+.sm-ty-text { position:absolute;left:50%;top:21%;transform:translate(-50%,0);width:78%;max-width:380px;text-align:center;z-index:22;pointer-events:auto;color:#4a2418 }
 
 .sm-ty-invite { color:#7c2d12 }
 

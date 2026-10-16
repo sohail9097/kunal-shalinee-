@@ -19,7 +19,7 @@ export const WEDDING_DATA = {
   groom: {
     name: "Dr. Kunal",
     hindiName: "कुणाल",
-    parents: "S/O Mr. Subodh Prasad & Mrs.Baby Devi ",
+    parents: "S/O Mr. Subodh Prasad & Mrs. Baby Devi",
     grandparents: "",
   } as PersonInfo,
   bride: {

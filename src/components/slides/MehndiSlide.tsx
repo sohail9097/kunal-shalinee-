@@ -696,7 +696,7 @@ export const MehndiSlide: React.FC<MehndiSlideProps> = ({
           </div>
         </motion.div>
 
-        {/* Couple Illustration (Easily changeable in weddingData.ts -> media.mehndi.couple) */}
+        {/* Couple Illustration with smooth fluid glide */}
         <motion.img
           src={WEDDING_DATA.media.mehndi.couple}
           alt="Shalinee and Kunal at the Mehndi & Sangeet"
@@ -704,12 +704,16 @@ export const MehndiSlide: React.FC<MehndiSlideProps> = ({
           initial={false}
           animate={{
             opacity: active ? 1 : 0,
-            y: active ? "0%" : "25%",
+            y: active ? 0 : 38,
+            scale: active ? 1 : 0.94,
           }}
           transition={{
-            duration: 0.85,
-            ease: EASE_ROYAL,
-            delay: active ? 0.35 : 0,
+            duration: active ? 1.25 : 0.4,
+            ease: [0.16, 1, 0.3, 1],
+            delay: active ? 0.16 : 0,
+          }}
+          style={{
+            willChange: "transform, opacity",
           }}
         />
 
