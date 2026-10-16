@@ -93,7 +93,7 @@ export const WEDDING_DATA = {
       fireworks: undefined as string | undefined,
     },
     wedding: {
-      bg: "/weddings/sakshi-manav/wedding/bg.avif",
+      bg: "/weddings/sakshi-manav/wedding/bg.jpg",
       fireworks: "/weddings/sakshi-manav/wedding/fireworks.mp4",
     },
     cocktail: {

@@ -134,7 +134,7 @@ export default function App() {
           isTransitioning.current = true;
           window.setTimeout(() => {
             isTransitioning.current = false;
-          }, 850);
+          }, 1250);
           return;
         } else if (direction < 0) {
           isTransitioning.current = true;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { WEDDING_DATA } from "../../data/weddingData";
 import { FlowerPetals } from "../FlowerPetals";
-import { GateDesign } from "../CarnivalGate";
+import { RoyalHaldiGate } from "../RoyalHaldiGate";
 
 interface CarnivalSlideProps {
   active?: boolean;
@@ -50,8 +50,11 @@ export const CarnivalSlide: React.FC<CarnivalSlideProps> = ({
         className="sm-haldi-behind"
         aria-hidden={!isOpen}
         initial={false}
-        animate={{ opacity: isOpen ? 1 : 0 }}
-        transition={{ duration: 0.6, ease: EASE_DOOR, delay: isOpen ? 0.35 : 0 }}
+        animate={{
+          opacity: isOpen ? 1 : 0,
+          scale: isOpen ? 1 : 0.9,
+        }}
+        transition={{ duration: 0.9, ease: EASE_DOOR, delay: isOpen ? 0.25 : 0 }}
       >
         {/* Background Image */}
         <img
@@ -61,8 +64,8 @@ export const CarnivalSlide: React.FC<CarnivalSlideProps> = ({
           aria-hidden={true}
         />
 
-        {/* Floating Petal Shower */}
-        <FlowerPetals count={10} />
+        {/* Floating Yellow & White Flower Petal Shower */}
+        <FlowerPetals count={18} />
 
         {/* Left & Right Fireworks Loop Videos */}
         {["l", "r"].map((side) => (
@@ -756,60 +759,12 @@ export const CarnivalSlide: React.FC<CarnivalSlideProps> = ({
         )}
       </motion.div>
 
-      {/* Sliding Palace Doors */}
-      <motion.div
-        className="sm-door sm-door--left"
-        onClick={handleOpenDoors}
-        style={{ cursor: !isOpen ? "pointer" : "default" }}
-        initial={false}
-        animate={{ x: isOpen || !active ? "-200%" : "0%" }}
-        transition={{ duration: 1, ease: EASE_DOOR }}
-      >
-        <div className="sm-door-face">
-          <GateDesign />
-        </div>
-      </motion.div>
-
-      <motion.div
-        className="sm-door sm-door--right"
-        onClick={handleOpenDoors}
-        style={{ cursor: !isOpen ? "pointer" : "default" }}
-        initial={false}
-        animate={{ x: isOpen || !active ? "200%" : "0%" }}
-        transition={{ duration: 1, ease: EASE_DOOR }}
-      >
-        <div className="sm-door-face sm-door-face--right">
-          <GateDesign />
-        </div>
-      </motion.div>
-
-      {/* Bell Button (Press for Carnival fun) */}
-      <div
-        className="sm-bell-wrap"
-        style={{ pointerEvents: showDoorPrompt ? "auto" : "none" }}
-      >
-        <motion.button
-          type="button"
-          className="sm-bell cursor-pointer"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleOpenDoors();
-          }}
-          aria-label="Press for Carnival fun"
-          initial={false}
-          animate={{
-            opacity: showDoorPrompt ? 1 : 0,
-            scale: showDoorPrompt ? 1 : 0.85,
-          }}
-          transition={{
-            duration: 0.4,
-            ease: EASE_DOOR,
-            delay: showDoorPrompt ? 1.05 : 0,
-          }}
-        >
-          <span className="sm-bell-boss" aria-hidden={true} />
-        </motion.button>
-      </div>
+      {/* Royal Haldi Entrance Gate matching user's design */}
+      <RoyalHaldiGate
+        isOpen={isOpen}
+        onOpen={handleOpenDoors}
+        active={active}
+      />
     </section>
   );
 };

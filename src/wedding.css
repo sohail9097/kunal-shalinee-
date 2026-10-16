@@ -172,11 +172,17 @@
 
 .sm-cloud--b { opacity:.65;width:42%;animation:22s ease-in-out infinite alternate sm-drift-b;top:34%;right:-6% }
 
-.sm-flowers { z-index:11;pointer-events:none;position:absolute;inset:0;overflow:hidden }
+.sm-flowers { z-index:22;pointer-events:none;position:absolute;inset:0;overflow:hidden }
 
-.sm-flower { filter:drop-shadow(0 2px 3px #96640a2e);will-change:transform,opacity;animation:linear infinite sm-fall;display:block;position:absolute;top:0 }
+.sm-flower { filter:drop-shadow(0 3px 5px rgba(74,40,6,0.22));will-change:transform,opacity;animation:linear infinite sm-flower-fall;display:block;position:absolute;top:0 }
 
-.sm-flower { opacity:0;animation:none }
+@keyframes sm-flower-fall {
+  0% { opacity:0;transform:translate3d(0,-12vh,0) rotate(0deg) scale(0.85); }
+  10% { opacity:0.95; }
+  50% { transform:translate3d(var(--sm-drift, 25px), 50vh, 0) rotate(var(--sm-mid-rot, 180deg)) scale(1.05); }
+  88% { opacity:0.95; }
+  100% { opacity:0;transform:translate3d(calc(var(--sm-drift, 25px) * 0.4), 112vh, 0) rotate(var(--sm-rot, 360deg)) scale(0.9); }
+}
 
 .sm-bird { z-index:12;pointer-events:none;filter:drop-shadow(0 3px 4px #00000026);width:82px;position:absolute;left:0 }
 

@@ -1,7 +1,6 @@
 import React from "react";
 import { motion } from "motion/react";
 import { WEDDING_DATA } from "../../data/weddingData";
-import { FlowerPetals } from "../FlowerPetals";
 import { MehndiGardenEffects } from "../MehndiGardenEffects";
 
 interface MehndiSlideProps {
@@ -34,9 +33,6 @@ export const MehndiSlide: React.FC<MehndiSlideProps> = ({
 
         {/* Dynamic Blinking/Flickering Lantern Lights & Swaying Flowers */}
         <MehndiGardenEffects />
-
-        {/* Floating Petal Shower */}
-        <FlowerPetals count={15} />
 
         {/* Left & Right Fireworks Loop Videos (if fireworks configured) */}
         {WEDDING_DATA.media.mehndi.fireworks &&
@@ -636,9 +632,9 @@ export const MehndiSlide: React.FC<MehndiSlideProps> = ({
                   x2="100%"
                   y2="100%"
                 >
-                  <stop offset="0%" stopColor="#f0fdf4" stopOpacity="0.82" />
-                  <stop offset="50%" stopColor="#dcfce7" stopOpacity="0.70" />
-                  <stop offset="100%" stopColor="#bbf7d0" stopOpacity="0.58" />
+                  <stop offset="0%" stopColor="#ffffff" stopOpacity="0.96" />
+                  <stop offset="50%" stopColor="#ffffff" stopOpacity="0.92" />
+                  <stop offset="100%" stopColor="#f8fafc" stopOpacity="0.88" />
                 </linearGradient>
                 <linearGradient
                   id="smGoldFrameMehndi"
@@ -650,7 +646,7 @@ export const MehndiSlide: React.FC<MehndiSlideProps> = ({
                   <stop offset="0%" stopColor="#d4af5c" />
                   <stop offset="35%" stopColor="#fae7a5" />
                   <stop offset="70%" stopColor="#cfa959" />
-                  <stop offset="100%" stopColor="#22543d" />
+                  <stop offset="100%" stopColor="#b38a2e" />
                 </linearGradient>
               </defs>
 
@@ -663,7 +659,7 @@ export const MehndiSlide: React.FC<MehndiSlideProps> = ({
               <path
                 d="M 26,6 H 294 C 296,12 306,22 314,24 V 44 C 306,46 296,56 294,62 H 26 C 24,56 14,46 6,44 V 24 C 14,22 24,12 26,6 Z"
                 fill="none"
-                stroke="#2d6a4f"
+                stroke="#cfa959"
                 strokeWidth="0.8"
                 opacity="0.6"
               />
