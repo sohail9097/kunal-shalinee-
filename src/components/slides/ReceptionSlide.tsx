@@ -24,7 +24,10 @@ export const ReceptionSlide: React.FC<ReceptionSlideProps> = ({
   active = false,
   onNext,
 }) => {
-  const event = WEDDING_DATA.events[2]; // Reception event
+  const event =
+    WEDDING_DATA.events.find((e) =>
+      e.title.toLowerCase().includes("reception")
+    ) || WEDDING_DATA.events[3];
 
   return (
     <section className="sm-slide sm-cocktail">

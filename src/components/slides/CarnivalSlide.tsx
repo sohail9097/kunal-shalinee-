@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { WEDDING_DATA } from "../../data/weddingData";
 import { FlowerPetals } from "../FlowerPetals";
@@ -7,6 +7,8 @@ import { GateDesign } from "../CarnivalGate";
 interface CarnivalSlideProps {
   active?: boolean;
   onNext?: () => void;
+  isOpen?: boolean;
+  onOpen?: () => void;
 }
 
 const EASE_DOOR: [number, number, number, number] = [0.65, 0, 0.35, 1];
@@ -14,16 +16,35 @@ const EASE_DOOR: [number, number, number, number] = [0.65, 0, 0.35, 1];
 export const CarnivalSlide: React.FC<CarnivalSlideProps> = ({
   active = false,
   onNext,
+  isOpen: controlledIsOpen,
+  onOpen,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen;
+
+  useEffect(() => {
+    if (controlledIsOpen !== undefined) {
+      setInternalIsOpen(controlledIsOpen);
+    }
+  }, [controlledIsOpen]);
+
   const showDoorPrompt = active && !isOpen;
 
   const handleOpenDoors = () => {
-    setIsOpen(true);
+    if (!isOpen) {
+      setInternalIsOpen(true);
+      onOpen?.();
+    }
   };
 
   return (
-    <section className="sm-slide sm-haldi">
+    <section
+      className="sm-slide sm-haldi"
+      onClick={() => {
+        if (!isOpen) handleOpenDoors();
+      }}
+      style={{ cursor: !isOpen ? "pointer" : "default" }}
+    >
       {/* Background layer behind doors */}
       <motion.div
         className="sm-haldi-behind"
@@ -738,6 +759,8 @@ export const CarnivalSlide: React.FC<CarnivalSlideProps> = ({
       {/* Sliding Palace Doors */}
       <motion.div
         className="sm-door sm-door--left"
+        onClick={handleOpenDoors}
+        style={{ cursor: !isOpen ? "pointer" : "default" }}
         initial={false}
         animate={{ x: isOpen || !active ? "-200%" : "0%" }}
         transition={{ duration: 1, ease: EASE_DOOR }}
@@ -749,6 +772,8 @@ export const CarnivalSlide: React.FC<CarnivalSlideProps> = ({
 
       <motion.div
         className="sm-door sm-door--right"
+        onClick={handleOpenDoors}
+        style={{ cursor: !isOpen ? "pointer" : "default" }}
         initial={false}
         animate={{ x: isOpen || !active ? "200%" : "0%" }}
         transition={{ duration: 1, ease: EASE_DOOR }}
@@ -765,8 +790,11 @@ export const CarnivalSlide: React.FC<CarnivalSlideProps> = ({
       >
         <motion.button
           type="button"
-          className="sm-bell"
-          onClick={handleOpenDoors}
+          className="sm-bell cursor-pointer"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleOpenDoors();
+          }}
           aria-label="Press for Carnival fun"
           initial={false}
           animate={{

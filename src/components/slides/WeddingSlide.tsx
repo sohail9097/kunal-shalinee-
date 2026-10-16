@@ -14,7 +14,10 @@ export const WeddingSlide: React.FC<WeddingSlideProps> = ({
   active = false,
   onNext,
 }) => {
-  const event = WEDDING_DATA.events[1]; // Wedding event
+  const event =
+    WEDDING_DATA.events.find((e) =>
+      e.title.toLowerCase().includes("wedding")
+    ) || WEDDING_DATA.events[2];
 
   return (
     <section className="sm-slide sm-wedding">

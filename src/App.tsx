@@ -5,29 +5,33 @@ import { OpeningEnvelope } from "./components/OpeningEnvelope";
 import { GanpatiGate } from "./components/GanpatiGate";
 import { SaveTheDateSlide } from "./components/slides/SaveTheDateSlide";
 import { CarnivalSlide } from "./components/slides/CarnivalSlide";
+import { MehndiSlide } from "./components/slides/MehndiSlide";
 import { WeddingSlide } from "./components/slides/WeddingSlide";
 import { ReceptionSlide } from "./components/slides/ReceptionSlide";
 import { FinaleSlide } from "./components/slides/FinaleSlide";
 import { AudioPlayer } from "./components/AudioPlayer";
 
-const SLIDE_COUNT = 5;
+const SLIDE_COUNT = 6;
 
 // Color accents for the swipe down hint on each slide
 const HINT_COLORS: Record<number, string> = {
   0: "#856512",
   1: "#7a1226",
-  2: "#f3e9d6",
-  3: "#4a1220",
-  4: "#e7c86b",
+  2: "#2d6a4f",
+  3: "#f3e9d6",
+  4: "#4a1220",
+  5: "#e7c86b",
 };
 
 const HINT_SHADOWS: Record<number, string> = {
   1: "drop-shadow(0 0 5px rgba(255,248,236,0.9))",
-  3: "drop-shadow(0 0 5px rgba(255,241,214,0.85))",
+  2: "drop-shadow(0 0 5px rgba(240,253,244,0.9))",
+  4: "drop-shadow(0 0 5px rgba(255,241,214,0.85))",
 };
 
 export default function App() {
   const [slideIndex, setSlideIndex] = useState(0);
+  const [isHaldiOpen, setIsHaldiOpen] = useState(false);
   const [isEnvelopeClosed, setIsEnvelopeClosed] = useState(true);
   const [ganpatiRevealed, setGanpatiRevealed] = useState(false);
   const [readyForDeck, setReadyForDeck] = useState(false);
@@ -107,21 +111,48 @@ export default function App() {
 
   // Slide navigation with debouncing
   const changeSlide = useCallback((direction: number) => {
-    setSlideIndex((curr) =>
-      Math.min(SLIDE_COUNT - 1, Math.max(0, curr + direction))
-    );
+    setSlideIndex((curr) => {
+      const next = Math.min(SLIDE_COUNT - 1, Math.max(0, curr + direction));
+      if (next === 0) {
+        setIsHaldiOpen(false);
+      }
+      if (next === 1 && curr >= 2) {
+        setIsHaldiOpen(true);
+      }
+      return next;
+    });
   }, []);
 
   const navigateDeck = useCallback(
     (direction: number) => {
       if (isEnvelopeClosed || !readyForDeck || isTransitioning.current) return;
+
+      // Haldi slide gate logic: scrolling or swiping down opens the Haldi doors instead of skipping to Wedding!
+      if (slideIndex === 1 && !isHaldiOpen) {
+        if (direction > 0) {
+          setIsHaldiOpen(true);
+          isTransitioning.current = true;
+          window.setTimeout(() => {
+            isTransitioning.current = false;
+          }, 850);
+          return;
+        } else if (direction < 0) {
+          isTransitioning.current = true;
+          changeSlide(-1);
+          window.setTimeout(() => {
+            isTransitioning.current = false;
+          }, 1150);
+          return;
+        }
+      }
+
       isTransitioning.current = true;
       changeSlide(direction);
       window.setTimeout(() => {
         isTransitioning.current = false;
       }, 1150);
     },
-    [changeSlide, isEnvelopeClosed, readyForDeck]
+    [changeSlide, isEnvelopeClosed, readyForDeck, slideIndex, isHaldiOpen]
   );
 
   // Prevent background scroll
@@ -196,7 +227,9 @@ export default function App() {
     !isEnvelopeClosed &&
     readyForDeck &&
     slideIndex >= 1 &&
-    slideIndex <= SLIDE_COUNT - 2;
+    slideIndex <= SLIDE_COUNT - 2 &&
+    !(slideIndex === 1 && isHaldiOpen) &&
+    slideIndex !== 2; // Mehndi slide has its own next button
 
   const hintColor = HINT_COLORS[slideIndex] || "#7c0f1c";
   const hintFilter = HINT_SHADOWS[slideIndex];
@@ -238,7 +271,7 @@ export default function App() {
             />
           </motion.div>
 
-          {/* Slide 1: Carnival & Sangeet */}
+          {/* Slide 1: Haldi Celebration */}
           <motion.div
             className="sm-layer"
             initial={false}
@@ -252,11 +285,13 @@ export default function App() {
           >
             <CarnivalSlide
               active={slideIndex === 1 && !isEnvelopeClosed && readyForDeck}
+              isOpen={isHaldiOpen}
+              onOpen={() => setIsHaldiOpen(true)}
               onNext={() => navigateDeck(1)}
             />
           </motion.div>
 
-          {/* Slide 2: Wedding */}
+          {/* Slide 2: Mehndi & Sangeet Celebration */}
           <motion.div
             className="sm-layer"
             initial={false}
@@ -268,13 +303,13 @@ export default function App() {
             style={{ pointerEvents: slideIndex === 2 ? "auto" : "none" }}
             aria-hidden={slideIndex !== 2}
           >
-            <WeddingSlide
+            <MehndiSlide
               active={slideIndex === 2 && !isEnvelopeClosed && readyForDeck}
               onNext={() => navigateDeck(1)}
             />
           </motion.div>
 
-          {/* Slide 3: Reception */}
+          {/* Slide 3: Wedding */}
           <motion.div
             className="sm-layer"
             initial={false}
@@ -286,13 +321,13 @@ export default function App() {
             style={{ pointerEvents: slideIndex === 3 ? "auto" : "none" }}
             aria-hidden={slideIndex !== 3}
           >
-            <ReceptionSlide
+            <WeddingSlide
               active={slideIndex === 3 && !isEnvelopeClosed && readyForDeck}
               onNext={() => navigateDeck(1)}
             />
           </motion.div>
 
-          {/* Slide 4: Finale & Lineage */}
+          {/* Slide 4: Reception */}
           <motion.div
             className="sm-layer"
             initial={false}
@@ -304,8 +339,26 @@ export default function App() {
             style={{ pointerEvents: slideIndex === 4 ? "auto" : "none" }}
             aria-hidden={slideIndex !== 4}
           >
-            <FinaleSlide
+            <ReceptionSlide
               active={slideIndex === 4 && !isEnvelopeClosed && readyForDeck}
+              onNext={() => navigateDeck(1)}
+            />
+          </motion.div>
+
+          {/* Slide 5: Finale & Lineage */}
+          <motion.div
+            className="sm-layer"
+            initial={false}
+            animate={{
+              opacity: slideIndex === 5 ? 1 : 0,
+              scale: slideIndex === 5 ? 1 : 1.06,
+            }}
+            transition={{ duration: 1.05, ease: [0.4, 0, 0.2, 1] }}
+            style={{ pointerEvents: slideIndex === 5 ? "auto" : "none" }}
+            aria-hidden={slideIndex !== 5}
+          >
+            <FinaleSlide
+              active={slideIndex === 5 && !isEnvelopeClosed && readyForDeck}
             />
           </motion.div>
 
@@ -324,7 +377,9 @@ export default function App() {
               filter: hintFilter || undefined,
             }}
           >
-            <span className="sm-hint-label sm-caps">Swipe down</span>
+            <span className="sm-hint-label sm-caps">
+              {slideIndex === 1 && !isHaldiOpen ? "Tap to open" : "Swipe down"}
+            </span>
             <svg
               viewBox="0 0 24 24"
               width="18"
@@ -346,11 +401,16 @@ export default function App() {
         {/* Slide Progress Dots (Left / Top) */}
         {!isEnvelopeClosed && readyForDeck && (
           <div className="fixed left-4 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col gap-2">
-            {[0, 1, 2, 3, 4].map((idx) => (
+            {[0, 1, 2, 3, 4, 5].map((idx) => (
               <button
                 key={idx}
                 type="button"
-                onClick={() => setSlideIndex(idx)}
+                onClick={() => {
+                  if (idx === 1 && slideIndex !== 1) {
+                    setIsHaldiOpen(false);
+                  }
+                  setSlideIndex(idx);
+                }}
                 aria-label={`Go to slide ${idx + 1}`}
                 className={`h-2.5 rounded-full transition-all duration-300 ${
                   slideIndex === idx

@@ -1,3 +1,10 @@
+export interface PersonInfo {
+  name: string;
+  hindiName: string;
+  parents: string;
+  grandparents?: string;
+}
+
 export interface WeddingEvent {
   date: string;
   title: string;
@@ -12,13 +19,14 @@ export const WEDDING_DATA = {
     name: "Dr. Shalinee",
     hindiName: "शालिनी",
     parents: "D/O Mr. Vidyasagar Mahaseth & Mrs. Anju Devi ",
-  
-  },
+    grandparents: "",
+  } as PersonInfo,
   groom: {
     name: "Dr. Kunal",
     hindiName: "कुणाल",
     parents: "S/O Mr. Subodh Prasad & Mrs.Baby Devi ",
-  },
+    grandparents: "",
+  } as PersonInfo,
   hashtag: "#Kunal Weds Shalinee",
   targetDate: "2026-11-25T00:00:00+05:30",
   venue: "Kala Bhawan Purnea, Bihar",
@@ -29,6 +37,14 @@ export const WEDDING_DATA = {
       date: "24 November 2026",
       title: "Haldi",
       time: "10:00 AM",
+      venue: "Baby Niwas, Rambagh, Purnia",
+      venueShort: "Baby Niwas Rambagh Purnia",
+      mapHref: "https://www.google.com/maps/search/?api=1&query=Baby+Niwas+Rambagh+Purnia",
+    },
+    {
+      date: "24 November 2026",
+      title: "Mehndi & Sangeet",
+      time: "5:00 PM",
       venue: "Baby Niwas, Rambagh, Purnia",
       venueShort: "Baby Niwas Rambagh Purnia",
       mapHref: "https://www.google.com/maps/search/?api=1&query=Baby+Niwas+Rambagh+Purnia",
@@ -68,6 +84,13 @@ export const WEDDING_DATA = {
       garland: "/weddings/sakshi-manav/carnival/garland.avif",
       couple: "/weddings/sakshi-manav/carnival/couple.avif",
       fireworks: "/weddings/sakshi-manav/carnival/fireworks.mp4",
+    },
+    mehndi: {
+      // Change Mehndi & Sangeet images here:
+      bg: "/weddings/sakshi-manav/carnival/mehndi-bg.avif",
+      garland: "/weddings/sakshi-manav/carnival/garland.avif",
+      couple: "/weddings/sakshi-manav/carnival/mehndi-couple.avif",
+      fireworks: undefined as string | undefined,
     },
     wedding: {
       bg: "/weddings/sakshi-manav/wedding/bg.avif",

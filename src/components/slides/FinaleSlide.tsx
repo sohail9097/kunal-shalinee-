@@ -84,9 +84,11 @@ export const FinaleSlide: React.FC<FinaleSlideProps> = ({ active = false }) => {
           <p className="sm-caps sm-ty-famparents">
             {WEDDING_DATA.bride.parents}
           </p>
-          <p className="sm-caps sm-ty-famgrand">
-            Granddaughter of {WEDDING_DATA.bride.grandparents}
-          </p>
+          {WEDDING_DATA.bride.grandparents ? (
+            <p className="sm-caps sm-ty-famgrand">
+              Granddaughter of {WEDDING_DATA.bride.grandparents}
+            </p>
+          ) : null}
         </motion.div>
 
         {/* weds */}
@@ -100,9 +102,11 @@ export const FinaleSlide: React.FC<FinaleSlideProps> = ({ active = false }) => {
           <p className="sm-caps sm-ty-famparents">
             {WEDDING_DATA.groom.parents}
           </p>
-          <p className="sm-caps sm-ty-famgrand">
-            Grandson of {WEDDING_DATA.groom.grandparents}
-          </p>
+          {WEDDING_DATA.groom.grandparents ? (
+            <p className="sm-caps sm-ty-famgrand">
+              Grandson of {WEDDING_DATA.groom.grandparents}
+            </p>
+          ) : null}
         </motion.div>
 
         {/* Venues & Map Trigger Button */}
