@@ -384,9 +384,9 @@
 
 .sm-cloud,.sm-dholki { animation:none }
 
-.sm-env { z-index:50;perspective:1500px;cursor:pointer;background:0 0;position:fixed;inset:0 }
+.sm-env { z-index:50;perspective:1500px;cursor:pointer;background:#f5edd8;position:fixed;inset:0 }
 
-.sm-flap { will-change:transform;background-color:#0000;background-image:linear-gradient(#f4ead680,#f4ead680),url(/weddings/sakshi-manav/envelope/pattern.avif);background-position:50%;background-repeat:repeat,repeat;background-size:cover;background-attachment:scroll,scroll;background-origin:padding-box,padding-box;background-clip:border-box,border-box;position:absolute;inset:0 }
+.sm-flap { will-change:transform;background-color:#f5edd8;background-image:linear-gradient(#f4ead680,#f4ead680),url(/weddings/sakshi-manav/envelope/pattern.avif);background-position:50%;background-repeat:repeat,repeat;background-size:cover;background-attachment:scroll,scroll;background-origin:padding-box,padding-box;background-clip:border-box,border-box;position:absolute;inset:0 }
 
 .sm-flap--bottom { clip-path:polygon(0 100%,100% 100%,50% 50%);z-index:2 }
 
@@ -910,11 +910,9 @@
 
 .sm-when--night { color:#ffeecb;text-shadow:0 1px 10px #060a1ebf }
 
-.sm-ty { background:#050a14 }
+.sm-ty { background:#fbf6ec }
 
-.sm-ty-sky { object-fit:cover;z-index:0;pointer-events:none;filter:brightness(.46)saturate(.92);width:100%;height:100%;position:absolute;inset:0 }
-
-.sm-lights:before { content:"";pointer-events:none;background:radial-gradient(120% 78% at 50% 46%,#02061000 0%,#0206108c 72%,#020610c7 100%);position:absolute;inset:0 }
+.sm-ty-sky { object-fit:cover;z-index:0;pointer-events:none;width:100%;height:100%;position:absolute;inset:0 }
 
 .sm-lights { z-index:1;pointer-events:none;position:absolute;inset:0;overflow:hidden }
 
@@ -922,27 +920,21 @@
 
 .sm-light { opacity:var(--sm-peak);animation:none }
 
-.sm-ty-canopy { z-index:20;pointer-events:none;will-change:transform;width:124%;max-width:none;height:auto;position:absolute;top:-2%;left:-12% }
+.sm-ty-text { z-index:22;color:#4a2418;top:43% }
 
-.sm-ty-stage { z-index:6;pointer-events:none;will-change:transform;width:112%;max-width:none;height:auto;position:absolute;bottom:0;left:-6% }
+.sm-ty-invite { color:#7c2d12 }
 
-.sm-ty-text { z-index:22;color:#f4e3c4;top:45% }
+.sm-ty-famname { color:#92400e }
 
-.sm-ty-text:before { content:"";z-index:-1;pointer-events:none;background:radial-gradient(62% 52% at 50% 48%,#030a169e 0%,#030a166b 58%,#030a1600 100%);border-radius:50%;position:absolute;inset:-7% -5% }
+.sm-ty-famparents { color:#5c3a21 }
 
-.sm-ty-invite { color:#ffdca8;text-shadow:0 1px 12px #040814cc }
+.sm-ty-famgrand { color:#78350f }
 
-.sm-ty-famname { color:#ffeecb;text-shadow:0 1px 12px #040814cc }
+.sm-ty-famjoin { color:#b45309 }
 
-.sm-ty-famparents { color:#ecd8b4 }
+.sm-ty-btn { border-color:#d97706;color:#78350f;-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);background:linear-gradient(135deg,rgba(255,252,245,.95),rgba(254,243,199,.9)) }
 
-.sm-ty-famgrand { color:#c9b892 }
-
-.sm-ty-famjoin { color:#e3b96a }
-
-.sm-ty-btn { border-color:color-mix(in srgb,var(--sm-gold)55%,transparent);color:#ffeecb;-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);background:#080e1c8c }
-
-.sm-ty-btn svg { color:#e3b96a }
+.sm-ty-btn svg { color:#d97706 }
 
 .sm-names-logo { width:min(64vw,300px);max-width:none;height:auto;margin:.5rem auto 0;display:block }
 
